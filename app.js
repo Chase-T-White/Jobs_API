@@ -10,6 +10,13 @@ const notFound = require('./middleware/not-found');
 // Middlewares
 app.use(express.json());
 
+// Extra Packages
+
+// Routes
+app.get('/', (req, res) => {
+    res.send('Jobs API');
+});
+
 app.use(errorHandlerMiddleware);
 app.use(notFound);
 
@@ -17,7 +24,7 @@ const port = process.env.PORT || 5000;
 
 const start = async () => {
     try {
-        app.listen(port, () => console.log(`Server is listening on port ${port}`));
+        app.listen(port, () => console.log(`Server is listening on port ${port}...`));
     } catch (err) {
         console.log(err);
     };

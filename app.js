@@ -1,5 +1,12 @@
 require("dotenv").config();
 require("express-async-errors");
+
+// Extra security packages
+const helmet = require("helmet");
+const cors = require("cors");
+const xss = require("xss-clean");
+const rateLimiter = require("express-rate-limit");
+
 // Connect routers
 const authRouter = require("./routes/auth");
 const jobsRouter = require("./routes/jobs");
@@ -15,9 +22,18 @@ const notFound = require("./middleware/not-found");
 const { connect } = require("mongoose");
 
 // Middlewares
-app.use(express.json());
+app.set("trust proxy", 1);
 
-// Extra Packages
+app.use(
+  rateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+  })
+);
+app.use(express.json());
+app.use(helmet());
+app.use(cors());
+app.use(xss());
 
 // Routes
 app.use("/api/v1/auth", authRouter);
